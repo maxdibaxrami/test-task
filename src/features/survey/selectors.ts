@@ -33,3 +33,6 @@ export const selectSurveySubmitting = (s: RootState) => s.survey.submitting;
 
 /* === 3. успешно ли отправлено (шаг 3 достигнут) === */
 export const selectSurveySuccess = (s: RootState) => s.survey.step === 3;
+
+export const selectSurveyPersonal = (s: RootState) => s.survey.personal;
+

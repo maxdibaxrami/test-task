@@ -1,14 +1,14 @@
 // SurveyForm.tsx
 import React, { type ChangeEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../hook/hooks';
-import { updateAnswer, submitRequest } from '../features/survey/surveySlice';
-import { selectSurveyAnswers, selectSurveySubmitting } from '../features/survey/selectors';
+import { updateAnswer } from '../features/survey/surveySlice';
+import { selectSurveyAnswers } from '../features/survey/selectors';
 import type { Section, Question, SurveySchema } from '../types';
 import { Radio } from './Radio';
 import { TextField } from './TextField';
 import { Typography } from './Typography';
-import { Button } from './Button';
 import styled from 'styled-components';
+import { breakpoints, containerWidths } from '../theme';
 
 interface Props {
   schema?: SurveySchema;
@@ -18,30 +18,12 @@ interface Props {
 export const SurveyForm: React.FC<Props> = ({ schema = [], onSuccess }) => {
   const dispatch = useAppDispatch();
   const answers = useAppSelector(selectSurveyAnswers);
-  const submitting = useAppSelector(selectSurveySubmitting);
   const [error, setError] = useState<string | null>(null);
 
   const update = (id: string, value: string | number) => {
     dispatch(updateAnswer({ id, value }));
   };
 
-  const isMissingRequired = (): string[] =>
-    schema.flatMap(section =>
-      section.questions
-        .filter(q => q.required && (answers[q.id] === undefined || answers[q.id] === ''))
-        .map(q => q.text)
-    );
-
-  const handleSubmit = () => {
-    const missing = isMissingRequired();
-    if (missing.length) {
-      setError(`Пожалуйста, ответьте на все обязательные вопросы (${missing.length}).`);
-      return;
-    }
-    setError(null);
-    dispatch(submitRequest());
-    onSuccess();
-  };
 
   return (
     <Wrapper>
@@ -65,9 +47,6 @@ export const SurveyForm: React.FC<Props> = ({ schema = [], onSuccess }) => {
         </ErrorWrapper>
       )}
 
-      <Button onClick={handleSubmit} disabled={submitting}>
-        {submitting ? 'Отправляем…' : 'Отправить опрос'}
-      </Button>
     </Wrapper>
   );
 };
@@ -80,9 +59,11 @@ interface QRProps {
 
 const QuestionRenderer: React.FC<QRProps> = ({ question, value, onChange }) => (
   <QuestionBlock>
-    <Typography variant="description16">
-      {question.text} {question.required && '*'}
-    </Typography>
+    {question.type === 'radio' && 
+      <Typography variant="description16">
+        {question.text} {question.required && '*'}
+      </Typography>
+    }
     {question.type === 'radio' ? (
       <RadioRow>
         {question.options.map((opt, idx) => (
@@ -127,6 +108,10 @@ const QuestionBlock = styled.div`
 const RadioRow = styled.div`
   display: flex;
   gap: 24px;
+  flex-direction: column;
+  @media (min-width: ${breakpoints.md}px) {
+    flex-direction: row;
+  }
 `;
 const ErrorWrapper = styled.div`
   color: red;

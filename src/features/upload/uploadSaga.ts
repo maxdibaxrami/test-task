@@ -5,6 +5,7 @@ import {
   uploadFailed,
 } from './uploadSlice';
 import { selectFiles } from './selectors';
+import { setTaskId } from '../task/taskSlice';
 
 function* uploadWorker() {
   try {
@@ -21,7 +22,8 @@ function* uploadWorker() {
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data: { task_id: string } = yield call([res, res.json]);
-    yield put(uploadSucceeded(data.task_id));
+    yield put(setTaskId(data.task_id));
+    yield put(uploadSucceeded());
   } catch (e: any) {
     yield put(uploadFailed(e.message || 'Unknown error'));
   }

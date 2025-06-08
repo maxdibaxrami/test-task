@@ -39,7 +39,7 @@ const Root = styled.button<ButtonProps>`
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-
+  justify-content:center;
   padding: 0.6em 1.2em;
   font-size: 16px;
   border-radius: 100px;

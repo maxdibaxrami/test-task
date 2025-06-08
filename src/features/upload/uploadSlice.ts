@@ -36,9 +36,8 @@ export const uploadSlice = createSlice({
       state.status = 'loading';
       state.error = null;
     },
-    uploadSucceeded(state, { payload }: PayloadAction<string>) {
+    uploadSucceeded(state) {
       state.status = 'succeeded';
-      state.taskId = payload;
     },
     uploadFailed(state, { payload }: PayloadAction<string>) {
       state.status = 'failed';

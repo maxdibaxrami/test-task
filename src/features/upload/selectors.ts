@@ -6,4 +6,3 @@ export const selectCanSubmit = (s: RootState) =>
   s.upload.files.every((f) => f !== null);
 export const selectStatus = (s: RootState) => s.upload.status;
 export const selectError = (s: RootState) => s.upload.error;
-export const selectTaskId = (s: RootState) => s.upload.taskId;

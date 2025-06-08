@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export type Gender = 'Мужской' | 'Женский' | '';
+
 export interface PersonalData {
   childName: string;
   birthDate: string | null;      // ISO «YYYY-MM-DD»
@@ -14,7 +15,7 @@ export interface SurveyState {
   answers: Record<string, string | number>;
   submitting: boolean;
   error: string | null;
-  taskId: string | null;
+  submitted: boolean;
 }
 
 const initialState: SurveyState = {
@@ -28,17 +29,13 @@ const initialState: SurveyState = {
   answers: {},
   submitting: false,
   error: null,
-  taskId: null,
+  submitted: false,
 };
 
 const surveySlice = createSlice({
   name: 'survey',
   initialState,
   reducers: {
-    /* --- stepper --- */
-    goToStep(state, { payload }: PayloadAction<1 | 2 | 3>) {
-      state.step = payload;
-    },
 
     /* --- personal form --- */
     updatePersonal(
@@ -54,11 +51,6 @@ const surveySlice = createSlice({
       { payload }: PayloadAction<{ id: string; value: string | number }>
     ) {
       state.answers[payload.id] = payload.value;
-    },
-
-    /* --- task id (получили на предыдущем экране) --- */
-    setTaskId(state, { payload }: PayloadAction<string>) {
-      state.taskId = payload;
     },
 
     /* --- submit lifecycle --- */
@@ -78,13 +70,11 @@ const surveySlice = createSlice({
 });
 
 export const {
-  goToStep,
   updatePersonal,
   updateAnswer,
   submitRequest,
   submitSuccess,
   submitFailure,
-  setTaskId,
 } = surveySlice.actions;
 
 export default surveySlice.reducer;

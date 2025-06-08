@@ -71,7 +71,9 @@ const UserDataStep: React.FC = () => {
       {/* Предупреждения */}
       <RedWrapper>
         <div style={{ display: 'flex', gap: '16px' }}>
-          <LikeIcon />
+          <div>
+            <LikeIcon />
+          </div>
           <Typography variant="description14">
             Пожалуйста, внимательно прочитайте каждый вопрос и выберите наиболее
             подходящий вариант ответа, отражающий поведение и эмоциональное
@@ -79,7 +81,9 @@ const UserDataStep: React.FC = () => {
           </Typography>
         </div>
         <div style={{ display: 'flex', gap: '16px' }}>
-          <FlaqIcon />
+          <div>
+            <FlaqIcon />
+          </div>
           <Typography variant="description14">Все вопросы обязательны к заполнению</Typography>
         </div>
       </RedWrapper>

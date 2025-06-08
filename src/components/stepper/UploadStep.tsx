@@ -13,7 +13,6 @@ import {
   selectCanSubmit,
   selectStatus,
   selectError,
-  selectTaskId,
 } from '../../features/upload/selectors';
 
 const Grid = styled.div`

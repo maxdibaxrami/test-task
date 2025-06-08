@@ -6,7 +6,7 @@ import { Stepper } from './components/Stepper';
 import { UploadStep } from './components/stepper/UploadStep';
 import UserDataStep from './components/stepper/userDataStep';
 import ReportStep from './components/stepper/ReportStep';
-import { ArrowLeft, ArrowRight, DoubleArrowRight } from './icon/icon';
+import { ArrowLeft, ArrowRight, DoubleArrowRight, DownloadIcon, MailIcon } from './icon/icon';
 import { useAppDispatch, useAppSelector } from './hook/hooks';
 import { store } from './store';
 
@@ -18,14 +18,15 @@ import { uploadRequested } from './features/upload/uploadSlice';
 import {
   selectCanProceedSurvey,
   selectSurveySubmitting,
-  selectSurveySuccess,
 } from './features/survey/selectors';
-import { goToStep, setTaskId, submitRequest } from './features/survey/surveySlice';
+
+import { submitRequest } from './features/survey/surveySlice';
+import { setStep } from './features/stepper/stepperSlice';
 
 function Steps() {
   const dispatch = useAppDispatch();
 
-  const step = useAppSelector(s => s.survey.step);
+  const step = useAppSelector(s => s.stepper.step);
 
   // Step 1 (upload)
   const canSubmitUpload = useAppSelector(selectCanSubmit);
@@ -34,7 +35,6 @@ function Steps() {
   // Step 2 (survey)
   const canProceedSurvey = useAppSelector(selectCanProceedSurvey);
   const surveySubmitting = useAppSelector(selectSurveySubmitting);
-  const surveySucceeded = useAppSelector(selectSurveySuccess);
 
   const canProceed =
     step === 1
@@ -42,17 +42,15 @@ function Steps() {
       : step === 2
       ? canProceedSurvey && !surveySubmitting
       : true;
+      step === 3
+      ? true
+      : true;
 
-  useEffect(() => {
-    if (step === 2 && surveySucceeded) {
-      dispatch(goToStep(3));
-    }
-  }, [step, surveySucceeded, dispatch]);
 
   const handlePrev = () => {
     console.log("aaaa")
     if (step >= 1) {
-      dispatch(goToStep((step - 1) as 1 | 2 | 3))
+      dispatch(setStep((step - 1) as 1 | 2 | 3))
           console.log("abbbbbbaaa")
 
     };
@@ -63,9 +61,11 @@ function Steps() {
       if(uploadStatus !== 'succeeded'){
         await dispatch(uploadRequested());
       }
-      dispatch(goToStep(2));
+      dispatch(setStep(2));
     } else if (step === 2) {
       await dispatch(submitRequest());
+      dispatch(setStep(3));
+
     }
   };
 
@@ -80,12 +80,13 @@ function Steps() {
         currentStep={step}
         canProceed={canProceed}
         nextLabels={['Далее', 'Узнать результаты', 'Поделиться результатами']}
-        prevLabels={['', 'К загрузке рисунков', 'Назад к анкете']}
-        nextIcons={[<ArrowRight key="1" />, <DoubleArrowRight key="2" />, <DoubleArrowRight key="3" />]}
-        prevIcons={[undefined, <ArrowLeft key="p2" />, <ArrowLeft key="p3" />]}
+        prevLabels={['', 'К загрузке рисунков', 'Скачать отчет PDF']}
+        nextIcons={[<ArrowRight key="1" />, <DoubleArrowRight key="2" />, <MailIcon key="3" />]}
+        prevIcons={[undefined, <ArrowLeft key="p2" />, <DownloadIcon key="p3" />]}
         onStepChange={target =>
           target > step ? handleNext() : handlePrev()
         }
+        prevVariant={step === 3? "primary" : "default"}
       />
     </Container>
   );
