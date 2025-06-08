@@ -1,0 +1,33 @@
+/* src/global.css */
+
+/* === 1. Custom font === */
+@font-face {
+  font-family: 'Circe Rounded';
+  src: url('/fonts/CirceRounded-Regular.woff2') format('woff2'),
+       url('/fonts/CirceRounded-Regular.woff')  format('woff'),
+       url('/fonts/CirceRounded-Regular.otf')   format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;        /* prevents FOIT, improves Core Web Vitals */
+}
+
+@font-face {
+  font-family: 'Circe Rounded';
+  src: url('/fonts/CirceRounded-Bold.woff2') format('woff2'),
+       url('/fonts/CirceRounded-Bold.woff')  format('woff'),
+       url('/fonts/CirceRounded-Bold.otf')   format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === 2. Reset + global typography === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  font-family: 'Circe Rounded';
+  line-height: 1.5;          /* 1 is too tight for body text */
+}
